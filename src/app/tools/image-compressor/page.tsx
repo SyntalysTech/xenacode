@@ -419,8 +419,7 @@ export default function ImageCompressorPage() {
                       <span>{formatFileSize(image.originalSize)}</span>
                       {image.compressedSize && (
                         <>
-                          <ArrowRight className="w-3 h-3 hidden sm:block" />
-                          <span className="sm:hidden">→</span>
+                          <span>→</span>
                           <span className="text-green-500">
                             {formatFileSize(image.compressedSize)}
                           </span>
