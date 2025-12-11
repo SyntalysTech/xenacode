@@ -4,13 +4,20 @@ import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/hooks';
 import { cn } from '@/lib/cn';
 
-export function ThemeSwitch() {
+interface ThemeSwitchProps {
+  forceDark?: boolean; // Forzar estilo oscuro (para fondos claros)
+}
+
+export function ThemeSwitch({ forceDark = false }: ThemeSwitchProps) {
   const { theme, toggleTheme, mounted } = useTheme();
 
   // Evitar flash de contenido incorrecto
   if (!mounted) {
     return (
-      <div className="w-14 h-8 rounded-full bg-[var(--border)] animate-pulse" />
+      <div className={cn(
+        'w-14 h-8 rounded-full animate-pulse',
+        forceDark ? 'bg-[#172140]/20' : 'bg-[var(--border)]'
+      )} />
     );
   }
 
@@ -19,9 +26,11 @@ export function ThemeSwitch() {
       onClick={toggleTheme}
       className={cn(
         'relative w-14 h-8 rounded-full transition-all duration-300',
-        'bg-[var(--border)] hover:bg-[var(--accent)]',
-        'focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2',
-        'group overflow-hidden'
+        'focus:outline-none focus:ring-2 focus:ring-offset-2',
+        'group overflow-hidden',
+        forceDark
+          ? 'bg-[#172140]/20 hover:bg-[#172140]/30 focus:ring-[#172140]'
+          : 'bg-[var(--border)] hover:bg-[var(--accent)] focus:ring-[var(--primary)]'
       )}
       aria-label={`Cambiar a modo ${theme === 'light' ? 'oscuro' : 'claro'}`}
     >

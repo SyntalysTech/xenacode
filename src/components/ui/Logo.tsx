@@ -11,6 +11,7 @@ interface LogoProps {
   linkToHome?: boolean;
   width?: number;
   height?: number;
+  forceDark?: boolean; // Forzar versión oscura del logo (para fondos claros)
 }
 
 export function Logo({
@@ -19,6 +20,7 @@ export function Logo({
   linkToHome = true,
   width,
   height,
+  forceDark = false,
 }: LogoProps) {
   const { theme, mounted } = useTheme();
   const { playKeySound } = useKeySound();
@@ -33,12 +35,15 @@ export function Logo({
   const finalHeight = height || defaultDimensions[variant].height;
 
   // Determinar que logo usar segun tema
+  // Si forceDark está activo, usar versión light-mode (logo oscuro para fondos claros)
+  const effectiveTheme = forceDark ? 'light' : theme;
+
   const logoSrc = mounted
     ? variant === 'horizontal'
-      ? theme === 'dark'
+      ? effectiveTheme === 'dark'
         ? '/assets/logos/logo-horizontal-dark-mode.png'
         : '/assets/logos/logo-horizontal-light-mode.png'
-      : theme === 'dark'
+      : effectiveTheme === 'dark'
         ? '/assets/logos/logo-isotope-dark-mode.png'
         : '/assets/logos/logo-isotope-light-mode.png'
     : variant === 'horizontal'
