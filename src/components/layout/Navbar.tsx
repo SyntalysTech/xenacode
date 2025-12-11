@@ -10,25 +10,13 @@ import { cn } from '@/lib/cn';
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isOverLightSection, setIsOverLightSection] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-
-      // Detectar si estamos sobre la sección Syntalys
-      const syntalysSection = document.getElementById('syntalys');
-      if (syntalysSection) {
-        const rect = syntalysSection.getBoundingClientRect();
-        const navbarHeight = 80;
-        // El navbar está sobre Syntalys si la sección está en el viewport y el navbar la intersecta
-        const isOver = rect.top <= navbarHeight && rect.bottom >= 0;
-        setIsOverLightSection(isOver);
-      }
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check inicial
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -53,35 +41,20 @@ export function Navbar() {
     }
   }, [isMobileMenuOpen]);
 
-  // Determinar colores basados en si estamos sobre sección clara
-  const textColor = isOverLightSection && !isScrolled
-    ? 'text-[#172140]'
-    : 'text-[var(--foreground)]';
-
-  const menuIconColor = isOverLightSection && !isScrolled
-    ? 'text-[#172140] hover:bg-white/20'
-    : 'text-[var(--foreground)] hover:bg-[var(--background-secondary)]';
-
   return (
     <>
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-50',
           'transition-all duration-300',
-          isScrolled
-            ? 'bg-[var(--background)]/95 backdrop-blur-md shadow-lg shadow-[var(--card-shadow)]'
-            : 'bg-transparent'
+          'bg-[var(--background)]/95 backdrop-blur-md',
+          isScrolled && 'shadow-lg shadow-[var(--card-shadow)]'
         )}
       >
         <nav className="container-custom">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Logo
-              variant="horizontal"
-              width={150}
-              height={40}
-              forceDark={isOverLightSection && !isScrolled}
-            />
+            <Logo variant="horizontal" width={150} height={40} />
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
@@ -90,13 +63,9 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'font-medium',
+                    'text-[var(--foreground)] font-medium',
                     'animated-underline',
-                    'transition-colors',
-                    textColor,
-                    isOverLightSection && !isScrolled
-                      ? 'hover:text-[#1d2c5e]'
-                      : 'hover:text-[var(--primary)]'
+                    'transition-colors hover:text-[var(--primary)]'
                   )}
                 >
                   {item.label}
@@ -106,27 +75,22 @@ export function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
-              <ThemeSwitch forceDark={isOverLightSection && !isScrolled} />
-              <Button
-                size="sm"
-                onClick={() => window.location.href = '#contacto'}
-                className={cn(
-                  isOverLightSection && !isScrolled && 'bg-[#172140] text-white hover:bg-[#1d2c5e]'
-                )}
-              >
+              <ThemeSwitch />
+              <Button size="sm" onClick={() => window.location.href = '#contacto'}>
                 Contactar
               </Button>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="flex lg:hidden items-center gap-4">
-              <ThemeSwitch forceDark={isOverLightSection && !isScrolled} />
+              <ThemeSwitch />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={cn(
                   'p-2 rounded-lg',
-                  'transition-colors',
-                  menuIconColor
+                  'text-[var(--foreground)]',
+                  'hover:bg-[var(--background-secondary)]',
+                  'transition-colors'
                 )}
                 aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
               >
