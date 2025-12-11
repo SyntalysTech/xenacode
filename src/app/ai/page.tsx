@@ -647,8 +647,9 @@ interface MessageBubbleProps {
 // Format inline markdown (bold, italic, inline code)
 function formatInlineMarkdown(text: string): React.ReactNode[] {
   const result: React.ReactNode[] = [];
-  // Match bold (**text** or __text__), italic (*text* or _text_), and inline code (`code`)
-  const regex = /(\*\*|__)(.+?)\1|(\*|_)(.+?)\3|`([^`]+)`/g;
+  // Match inline code first, then bold, then italic
+  // Order matters: longer patterns first
+  const regex = /`([^`]+)`|(\*\*|__)(.+?)\2|(\*|_)([^*_]+)\4/g;
   let lastIndex = 0;
   let match;
   let key = 0;
@@ -656,22 +657,22 @@ function formatInlineMarkdown(text: string): React.ReactNode[] {
   while ((match = regex.exec(text)) !== null) {
     // Add text before match
     if (match.index > lastIndex) {
-      result.push(text.slice(lastIndex, match.index));
+      result.push(<span key={`t${key++}`}>{text.slice(lastIndex, match.index)}</span>);
     }
 
     if (match[1]) {
-      // Bold
-      result.push(<strong key={key++} className="font-semibold">{match[2]}</strong>);
-    } else if (match[3]) {
-      // Italic
-      result.push(<em key={key++} className="italic">{match[4]}</em>);
-    } else if (match[5]) {
-      // Inline code
+      // Inline code `code`
       result.push(
-        <code key={key++} className="px-1.5 py-0.5 bg-[var(--background-tertiary)] rounded text-sm font-mono">
-          {match[5]}
+        <code key={key++} className="px-1.5 py-0.5 mx-0.5 bg-[var(--background-tertiary)] border border-[var(--border)] rounded text-[0.85em] font-mono text-[var(--accent)]">
+          {match[1]}
         </code>
       );
+    } else if (match[2]) {
+      // Bold **text** or __text__
+      result.push(<strong key={key++} className="font-bold">{match[3]}</strong>);
+    } else if (match[4]) {
+      // Italic *text* or _text_
+      result.push(<em key={key++} className="italic">{match[5]}</em>);
     }
 
     lastIndex = match.index + match[0].length;
@@ -679,7 +680,7 @@ function formatInlineMarkdown(text: string): React.ReactNode[] {
 
   // Add remaining text
   if (lastIndex < text.length) {
-    result.push(text.slice(lastIndex));
+    result.push(<span key={`t${key++}`}>{text.slice(lastIndex)}</span>);
   }
 
   return result.length > 0 ? result : [text];
@@ -689,65 +690,95 @@ function formatInlineMarkdown(text: string): React.ReactNode[] {
 function parseMarkdownText(text: string): React.ReactNode {
   const lines = text.split('\n');
   const elements: React.ReactNode[] = [];
-  let listItems: string[] = [];
+  let listItems: Array<{ content: string; indent: number }> = [];
   let listType: 'ul' | 'ol' | null = null;
   let key = 0;
 
   const flushList = () => {
     if (listItems.length > 0 && listType) {
-      const ListTag = listType === 'ol' ? 'ol' : 'ul';
       elements.push(
-        <ListTag key={key++} className={cn(
-          'my-2 space-y-1',
-          listType === 'ol' ? 'list-decimal list-inside' : 'list-disc list-inside'
-        )}>
+        <ul key={key++} className="my-3 ml-1 space-y-2">
           {listItems.map((item, i) => (
-            <li key={i} className="text-sm md:text-base">
-              {formatInlineMarkdown(item)}
+            <li key={i} className="flex gap-2 text-sm md:text-base">
+              <span className="text-[var(--accent)] mt-1.5 flex-shrink-0">
+                {listType === 'ol' ? `${i + 1}.` : '•'}
+              </span>
+              <span className="flex-1">{formatInlineMarkdown(item.content)}</span>
             </li>
           ))}
-        </ListTag>
+        </ul>
       );
       listItems = [];
       listType = null;
     }
   };
 
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Check for headers (### Header)
+    const h3Match = line.match(/^###\s+(.+)/);
+    if (h3Match) {
+      flushList();
+      elements.push(
+        <h3 key={key++} className="text-base md:text-lg font-bold mt-4 mb-2 text-[var(--foreground)]">
+          {formatInlineMarkdown(h3Match[1])}
+        </h3>
+      );
+      continue;
+    }
+
+    const h2Match = line.match(/^##\s+(.+)/);
+    if (h2Match) {
+      flushList();
+      elements.push(
+        <h2 key={key++} className="text-lg md:text-xl font-bold mt-4 mb-2 text-[var(--foreground)]">
+          {formatInlineMarkdown(h2Match[1])}
+        </h2>
+      );
+      continue;
+    }
+
     // Check for numbered list (1. item, 2. item, etc.)
-    const olMatch = line.match(/^\d+\.\s+(.+)/);
+    const olMatch = line.match(/^(\s*)\d+\.\s+(.+)/);
     if (olMatch) {
       if (listType !== 'ol') {
         flushList();
         listType = 'ol';
       }
-      listItems.push(olMatch[1]);
+      listItems.push({ content: olMatch[2], indent: olMatch[1].length });
       continue;
     }
 
     // Check for bullet list (- item, * item)
-    const ulMatch = line.match(/^[-*]\s+(.+)/);
+    const ulMatch = line.match(/^(\s*)[-*•]\s+(.+)/);
     if (ulMatch) {
       if (listType !== 'ul') {
         flushList();
         listType = 'ul';
       }
-      listItems.push(ulMatch[1]);
+      listItems.push({ content: ulMatch[2], indent: ulMatch[1].length });
       continue;
     }
 
     // Not a list item, flush any pending list
     flushList();
 
-    // Empty line
+    // Empty line - add spacing
     if (line.trim() === '') {
-      elements.push(<br key={key++} />);
+      // Only add break if not at start and previous wasn't a break
+      if (elements.length > 0) {
+        const lastEl = elements[elements.length - 1];
+        if (lastEl && typeof lastEl === 'object' && 'type' in lastEl && lastEl.type !== 'br') {
+          elements.push(<div key={key++} className="h-2" />);
+        }
+      }
       continue;
     }
 
     // Regular paragraph
     elements.push(
-      <p key={key++} className="text-sm md:text-base">
+      <p key={key++} className="text-sm md:text-base leading-relaxed">
         {formatInlineMarkdown(line)}
       </p>
     );
@@ -756,7 +787,7 @@ function parseMarkdownText(text: string): React.ReactNode {
   // Flush any remaining list
   flushList();
 
-  return <div className="space-y-1">{elements}</div>;
+  return <div className="space-y-2">{elements}</div>;
 }
 
 function MessageBubble({ message, onCopy, onDownload, isCopied }: MessageBubbleProps) {
