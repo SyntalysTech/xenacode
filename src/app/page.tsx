@@ -6,6 +6,7 @@ import {
   FeaturedProjects,
   Testimonials,
   Contact,
+  FreeTools,
 } from '@/components/sections';
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <Syntalys />
       <Testimonials />
       <Contact />
+      <FreeTools />
     </>
   );
 }

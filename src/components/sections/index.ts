@@ -5,3 +5,4 @@ export { Syntalys } from './Syntalys';
 export { FeaturedProjects } from './FeaturedProjects';
 export { Testimonials } from './Testimonials';
 export { Contact } from './Contact';
+export { FreeTools } from './FreeTools';

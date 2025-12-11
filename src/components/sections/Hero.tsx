@@ -72,7 +72,7 @@ export function Hero() {
 
       {/* Main Content */}
       <div className="container-custom relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
           {/* Text Content */}
           <div className="text-center lg:text-left">
             <AnimatedSection animation="fade-up" delay={0}>
@@ -82,10 +82,9 @@ export function Hero() {
             </AnimatedSection>
 
             <AnimatedSection animation="fade-up" delay={100}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--foreground)] mb-6 leading-tight">
-                Desarrollo de software
-                <span className="block gradient-text">que transforma ideas</span>
-                en soluciones reales
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[var(--foreground)] mb-6 leading-[1.1]">
+                Desarrollo de software{' '}
+                <span className="gradient-text">que transforma ideas en soluciones</span> reales
               </h1>
             </AnimatedSection>
 

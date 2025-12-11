@@ -2,11 +2,11 @@ import type { NavItem } from '@/types';
 
 export const navItems: NavItem[] = [
   { label: 'Inicio', href: '/' },
-  { label: 'Servicios', href: '#servicios' },
-  { label: 'Proyectos', href: '#proyectos' },
-  { label: 'Syntalys', href: '#syntalys' },
-  { label: 'Opiniones', href: '#opiniones' },
-  { label: 'Contacto', href: '#contacto' },
+  { label: 'Servicios', href: '/#servicios' },
+  { label: 'Proyectos', href: '/#proyectos' },
+  { label: 'Syntalys', href: '/#syntalys' },
+  { label: 'Opiniones', href: '/#opiniones' },
+  { label: 'Contacto', href: '/#contacto' },
   { label: 'XenaCodeAI', href: '/ai' },
 ];
 
