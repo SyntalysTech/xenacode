@@ -111,7 +111,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2 text-[var(--foreground-muted)]">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                <span>Suiza (remoto mundial)</span>
+                <span>España (remoto mundial)</span>
               </li>
               <li className="pt-2">
                 <a

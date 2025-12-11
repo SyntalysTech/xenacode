@@ -140,7 +140,7 @@ export function Contact() {
                   <div>
                     <h4 className="font-semibold text-[var(--foreground)]">Ubicación</h4>
                     <p className="text-[var(--foreground-muted)]">
-                      Suiza (trabajo remoto mundial)
+                      España (trabajo remoto mundial)
                     </p>
                   </div>
                 </div>

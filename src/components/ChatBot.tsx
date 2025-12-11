@@ -11,7 +11,7 @@ import { useThemeContext } from '@/context/ThemeContext';
 const XENACODE_INFO = {
   nombre: 'XenaCode',
   experiencia: '12 años',
-  ubicacion: 'Suiza (SYNTALYS TECH)',
+  ubicacion: 'España (remoto mundial)',
   email: 'hello@xenacode.com',
   servicios: [
     {
@@ -98,7 +98,7 @@ function getBotResponse(message: string): string {
 
   // Syntalys
   if (msg.match(/(syntalys|suiza|empresa|asociad)/)) {
-    return '**SYNTALYS TECH** es mi empresa asociada en Suiza, ubicada en Bure. Está especializada en desarrollo de soluciones de IA, automatización y ciberseguridad para empresas europeas. Web: syntalys.ch';
+    return '**SYNTALYS TECH** es mi empresa asociada con sede en Suiza (Bure). Yo vivo en España, pero la empresa está registrada en Suiza. Está especializada en desarrollo de soluciones de IA, automatización y ciberseguridad para empresas europeas. Web: syntalys.ch';
   }
 
   // Tecnologías

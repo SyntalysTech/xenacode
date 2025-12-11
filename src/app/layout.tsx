@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: '%s | XenaCode',
   },
   description:
-    'Desarrollo de webs, inteligencia artificial, ciberseguridad, apps y software a medida. 12 años de experiencia como Full Stack Senior. Empresa asociada SYNTALYS TECH en Suiza.',
+    'Desarrollo de webs, inteligencia artificial, ciberseguridad, apps y software a medida. 12 años de experiencia como Full Stack Senior en España. Empresa asociada SYNTALYS TECH en Suiza.',
   keywords: [
     'programador full stack',
     'desarrollo web',
@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     'Next.js',
     'React',
     'TypeScript',
+    'España',
     'Suiza',
   ],
   authors: [{ name: 'XenaCode' }],
