@@ -381,9 +381,9 @@ END:VCARD`;
                 Vista previa
               </h2>
 
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-6 overflow-hidden">
                 <div
-                  className="p-4 rounded-2xl"
+                  className="p-4 rounded-2xl max-w-full"
                   style={{ backgroundColor: bgColor }}
                 >
                   {qrDataUrl ? (
@@ -397,11 +397,11 @@ END:VCARD`;
                     />
                   ) : (
                     <div
-                      className="flex items-center justify-center text-[var(--foreground-muted)]"
-                      style={{ width: size, height: size }}
+                      className="flex items-center justify-center text-[var(--foreground-muted)] max-w-full"
+                      style={{ width: Math.min(size, 280), height: Math.min(size, 280) }}
                     >
-                      <div className="text-center">
-                        <QrCode className="w-16 h-16 mx-auto mb-2 opacity-30" />
+                      <div className="text-center px-4">
+                        <QrCode className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 opacity-30" />
                         <p className="text-sm">Ingresa contenido para generar el QR</p>
                       </div>
                     </div>

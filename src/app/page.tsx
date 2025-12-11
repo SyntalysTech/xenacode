@@ -15,13 +15,13 @@ export default function Home() {
     <>
       <Hero />
       <Services />
-      <TechStack />
       <FeaturedProjects />
-      <Syntalys />
       <Testimonials />
-      <Contact />
-      <FreeTools />
+      <TechStack />
       <XenaCodeAIPromo />
+      <FreeTools />
+      <Syntalys />
+      <Contact />
     </>
   );
 }

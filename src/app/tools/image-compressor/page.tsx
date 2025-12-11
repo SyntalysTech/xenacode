@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   Trash2,
   FileImage,
-  ArrowRight,
   Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -340,32 +339,35 @@ export default function ImageCompressorPage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={compressAll}
-                  disabled={pendingCount === 0}
-                  className={cn(
-                    'inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all',
-                    pendingCount > 0
-                      ? 'bg-[var(--primary)] text-[var(--background)] hover:opacity-90'
-                      : 'bg-[var(--background-secondary)] text-[var(--foreground-muted)] cursor-not-allowed'
-                  )}
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Comprimir {pendingCount > 0 && `(${pendingCount})`}
-                </button>
-                {doneCount > 0 && (
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-wrap gap-3 flex-1">
                   <button
-                    onClick={downloadAll}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white font-medium hover:opacity-90 transition-opacity"
+                    onClick={compressAll}
+                    disabled={pendingCount === 0}
+                    className={cn(
+                      'flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all',
+                      pendingCount > 0
+                        ? 'bg-[var(--primary)] text-[var(--background)] hover:opacity-90'
+                        : 'bg-[var(--background-secondary)] text-[var(--foreground-muted)] cursor-not-allowed'
+                    )}
                   >
-                    <Download className="w-4 h-4" />
-                    Descargar todo
+                    <Sparkles className="w-4 h-4" />
+                    Comprimir {pendingCount > 0 && `(${pendingCount})`}
                   </button>
-                )}
+                  {doneCount > 0 && (
+                    <button
+                      onClick={downloadAll}
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white font-medium hover:opacity-90 transition-opacity"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span className="hidden xs:inline">Descargar todo</span>
+                      <span className="xs:hidden">Descargar</span>
+                    </button>
+                  )}
+                </div>
                 <button
                   onClick={clearAll}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] font-medium hover:border-red-500 hover:text-red-500 transition-colors ml-auto"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] font-medium hover:border-red-500 hover:text-red-500 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                   Limpiar
@@ -376,10 +378,10 @@ export default function ImageCompressorPage() {
             {/* Stats */}
             {doneCount > 0 && (
               <div className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/20">
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
                   <span className="text-[var(--foreground)]">
                     <strong>{formatFileSize(totalOriginal)}</strong>
-                    <ArrowRight className="w-4 h-4 inline mx-2" />
+                    <span className="mx-2">→</span>
                     <strong className="text-green-500">
                       {formatFileSize(totalCompressed)}
                     </strong>
@@ -396,10 +398,10 @@ export default function ImageCompressorPage() {
               {images.map((image) => (
                 <div
                   key={image.id}
-                  className="p-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border)] flex items-center gap-4"
+                  className="p-3 sm:p-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border)] flex items-center gap-3 sm:gap-4"
                 >
                   {/* Thumbnail */}
-                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-[var(--background-secondary)] flex-shrink-0">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-[var(--background-secondary)] flex-shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={image.compressedUrl || image.originalUrl}
@@ -409,26 +411,21 @@ export default function ImageCompressorPage() {
                   </div>
 
                   {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-[var(--foreground)] truncate">
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <p className="font-medium text-[var(--foreground)] truncate text-sm sm:text-base">
                       {image.file.name}
                     </p>
-                    <div className="flex items-center gap-2 text-sm text-[var(--foreground-muted)]">
+                    <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm text-[var(--foreground-muted)]">
                       <span>{formatFileSize(image.originalSize)}</span>
                       {image.compressedSize && (
                         <>
-                          <ArrowRight className="w-3 h-3" />
+                          <ArrowRight className="w-3 h-3 hidden sm:block" />
+                          <span className="sm:hidden">→</span>
                           <span className="text-green-500">
                             {formatFileSize(image.compressedSize)}
                           </span>
                           <span className="text-green-500 text-xs">
-                            (-
-                            {Math.round(
-                              ((image.originalSize - image.compressedSize) /
-                                image.originalSize) *
-                                100
-                            )}
-                            %)
+                            (-{Math.round(((image.originalSize - image.compressedSize) / image.originalSize) * 100)}%)
                           </span>
                         </>
                       )}
@@ -436,14 +433,14 @@ export default function ImageCompressorPage() {
                   </div>
 
                   {/* Status/Actions */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     {image.status === 'compressing' && (
                       <div className="w-5 h-5 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
                     )}
                     {image.status === 'done' && (
                       <button
                         onClick={() => downloadImage(image)}
-                        className="p-2 rounded-lg bg-green-500 text-white hover:opacity-90 transition-opacity"
+                        className="p-1.5 sm:p-2 rounded-lg bg-green-500 text-white hover:opacity-90 transition-opacity"
                       >
                         <Download className="w-4 h-4" />
                       </button>
@@ -453,7 +450,7 @@ export default function ImageCompressorPage() {
                     )}
                     <button
                       onClick={() => removeImage(image.id)}
-                      className="p-2 rounded-lg hover:bg-red-500/10 text-[var(--foreground-muted)] hover:text-red-500 transition-colors"
+                      className="p-1.5 sm:p-2 rounded-lg hover:bg-red-500/10 text-[var(--foreground-muted)] hover:text-red-500 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

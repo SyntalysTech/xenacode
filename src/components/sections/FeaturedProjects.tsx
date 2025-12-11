@@ -194,7 +194,7 @@ export function FeaturedProjects() {
       <div className="container-custom">
         <SectionTitle
           title="Proyectos"
-          subtitle="Una selección de trabajos que demuestran mi experiencia y versatilidad"
+          subtitle="Algunos de los proyectos en los que estoy trabajando actualmente"
         />
 
         {/* Grid de proyectos - 2 columnas para que queden parejos */}

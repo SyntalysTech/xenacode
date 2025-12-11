@@ -10,7 +10,6 @@ import {
   Binary,
   ArrowRight,
   Sparkles,
-  Zap,
 } from 'lucide-react';
 import { SectionTitle, AnimatedSection } from '@/components/ui';
 import { cn } from '@/lib/cn';
@@ -172,17 +171,6 @@ export function FreeTools() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <AnimatedSection animation="fade-up" delay={600}>
-          <div className="mt-16 text-center">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[var(--background-secondary)] border border-[var(--border)]">
-              <Zap className="w-5 h-5 text-[var(--accent)]" />
-              <span className="text-[var(--foreground-muted)]">
-                Más herramientas en desarrollo...
-              </span>
-            </div>
-          </div>
-        </AnimatedSection>
       </div>
     </section>
   );

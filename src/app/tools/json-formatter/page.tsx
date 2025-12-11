@@ -121,9 +121,9 @@ export default function JsonFormatterPage() {
       {/* Main Content */}
       <div className="container-custom py-8">
         {/* Controls */}
-        <div className="flex flex-wrap items-center gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-[var(--foreground-muted)]">Indentación:</label>
+            <label className="text-sm text-[var(--foreground-muted)] whitespace-nowrap">Indentación:</label>
             <select
               value={indentSize}
               onChange={(e) => setIndentSize(Number(e.target.value))}
@@ -135,17 +135,17 @@ export default function JsonFormatterPage() {
             </select>
           </div>
 
-          <div className="flex gap-2 ml-auto">
+          <div className="flex gap-2 sm:ml-auto w-full sm:w-auto">
             <button
               onClick={formatJson}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--background)] font-medium hover:opacity-90 transition-opacity"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--background)] font-medium hover:opacity-90 transition-opacity"
             >
               <Maximize2 className="w-4 h-4" />
               Formatear
             </button>
             <button
               onClick={minifyJson}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] font-medium hover:border-[var(--primary)] transition-colors"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] font-medium hover:border-[var(--primary)] transition-colors"
             >
               <Minimize2 className="w-4 h-4" />
               Minificar

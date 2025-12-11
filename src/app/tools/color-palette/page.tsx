@@ -184,7 +184,7 @@ export default function ColorPalettePage() {
       {/* Main Content */}
       <div className="container-custom py-8">
         {/* Controls */}
-        <div className="flex flex-wrap items-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
           <div className="flex items-center gap-2">
             <label className="text-sm text-[var(--foreground-muted)]">Modo:</label>
             <select
@@ -197,17 +197,18 @@ export default function ColorPalettePage() {
             </select>
           </div>
 
-          <div className="flex gap-2 ml-auto">
+          <div className="flex gap-2 sm:ml-auto w-full sm:w-auto">
             <button
               onClick={copyAllColors}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] font-medium hover:border-[var(--primary)] transition-colors"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] font-medium hover:border-[var(--primary)] transition-colors"
             >
               {copiedIndex === -1 ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-              Copiar todo
+              <span className="hidden xs:inline">Copiar todo</span>
+              <span className="xs:hidden">Copiar</span>
             </button>
             <button
               onClick={generatePalette}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--background)] font-medium hover:opacity-90 transition-opacity"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--background)] font-medium hover:opacity-90 transition-opacity"
             >
               <RefreshCw className="w-4 h-4" />
               Generar
@@ -289,19 +290,19 @@ export default function ColorPalettePage() {
             Exportar Paleta
           </h2>
 
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* CSS Variables */}
-            <div className="p-4 rounded-xl bg-[var(--background-secondary)]">
+            <div className="p-4 rounded-xl bg-[var(--background-secondary)] overflow-hidden">
               <p className="text-sm font-medium text-[var(--foreground)] mb-2">CSS Variables</p>
-              <pre className="text-xs text-[var(--foreground-muted)] font-mono overflow-x-auto">
+              <pre className="text-xs text-[var(--foreground-muted)] font-mono overflow-x-auto whitespace-pre-wrap break-all">
 {colors.map((c, i) => `--color-${i + 1}: ${c.hex};`).join('\n')}
               </pre>
             </div>
 
             {/* Tailwind */}
-            <div className="p-4 rounded-xl bg-[var(--background-secondary)]">
+            <div className="p-4 rounded-xl bg-[var(--background-secondary)] overflow-hidden">
               <p className="text-sm font-medium text-[var(--foreground)] mb-2">Tailwind Config</p>
-              <pre className="text-xs text-[var(--foreground-muted)] font-mono overflow-x-auto">
+              <pre className="text-xs text-[var(--foreground-muted)] font-mono overflow-x-auto whitespace-pre-wrap break-all">
 {`colors: {
 ${colors.map((c, i) => `  'custom-${i + 1}': '${c.hex}'`).join(',\n')}
 }`}
@@ -309,9 +310,9 @@ ${colors.map((c, i) => `  'custom-${i + 1}': '${c.hex}'`).join(',\n')}
             </div>
 
             {/* Array */}
-            <div className="p-4 rounded-xl bg-[var(--background-secondary)]">
+            <div className="p-4 rounded-xl bg-[var(--background-secondary)] overflow-hidden">
               <p className="text-sm font-medium text-[var(--foreground)] mb-2">Array</p>
-              <pre className="text-xs text-[var(--foreground-muted)] font-mono overflow-x-auto">
+              <pre className="text-xs text-[var(--foreground-muted)] font-mono overflow-x-auto whitespace-pre-wrap break-all">
 {`[${colors.map(c => `'${c.hex}'`).join(', ')}]`}
               </pre>
             </div>

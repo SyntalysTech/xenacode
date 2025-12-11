@@ -200,15 +200,15 @@ export default function Base64Page() {
       {/* Main Content */}
       <div className="container-custom py-8">
         {/* Mode Toggle */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-          <div className="inline-flex rounded-xl bg-[var(--background-secondary)] p-1">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8">
+          <div className="inline-flex rounded-xl bg-[var(--background-secondary)] p-1 w-full sm:w-auto">
             <button
               onClick={() => {
                 setMode('encode');
                 handleClear();
               }}
               className={cn(
-                'px-6 py-2 rounded-lg font-medium transition-all',
+                'flex-1 sm:flex-initial px-4 sm:px-6 py-2 rounded-lg font-medium transition-all text-sm sm:text-base',
                 mode === 'encode'
                   ? 'bg-[var(--primary)] text-[var(--background)]'
                   : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
@@ -222,7 +222,7 @@ export default function Base64Page() {
                 handleClear();
               }}
               className={cn(
-                'px-6 py-2 rounded-lg font-medium transition-all',
+                'flex-1 sm:flex-initial px-4 sm:px-6 py-2 rounded-lg font-medium transition-all text-sm sm:text-base',
                 mode === 'decode'
                   ? 'bg-[var(--primary)] text-[var(--background)]'
                   : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
@@ -243,14 +243,14 @@ export default function Base64Page() {
 
         {/* Input Type Toggle (for encode mode) */}
         {mode === 'encode' && (
-          <div className="flex justify-center gap-4 mb-6">
+          <div className="flex justify-center gap-2 sm:gap-4 mb-6">
             <button
               onClick={() => {
                 setInputType('text');
                 handleClear();
               }}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all',
+                'inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg transition-all text-sm sm:text-base',
                 inputType === 'text'
                   ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]'
                   : 'bg-[var(--background-secondary)] text-[var(--foreground-muted)] border border-[var(--border)]'
@@ -265,7 +265,7 @@ export default function Base64Page() {
                 handleClear();
               }}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-all',
+                'inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg transition-all text-sm sm:text-base',
                 inputType === 'file'
                   ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]'
                   : 'bg-[var(--background-secondary)] text-[var(--foreground-muted)] border border-[var(--border)]'
