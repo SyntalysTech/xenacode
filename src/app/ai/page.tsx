@@ -60,13 +60,19 @@ export default function XenaCodeAIPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-scroll to bottom
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom within the messages container
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    // Small delay to ensure content is rendered
+    const timer = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timer);
   }, [messages, scrollToBottom]);
 
   // Handle scroll for header
@@ -221,7 +227,7 @@ export default function XenaCodeAIPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--background)]">
+    <div className="h-screen flex flex-col bg-[var(--background)] overflow-hidden">
       {/* Header */}
       <header
         className={cn(
@@ -382,9 +388,12 @@ export default function XenaCodeAIPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pt-16 md:pt-20 flex flex-col">
+      <main className="flex-1 pt-16 md:pt-20 flex flex-col overflow-hidden">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div
+          ref={messagesContainerRef}
+          className="flex-1 overflow-y-auto scroll-smooth"
+        >
           {messages.length === 0 ? (
             // Welcome Screen
             <div className="h-full flex flex-col items-center justify-center px-4 py-8 md:py-16">
@@ -635,10 +644,125 @@ interface MessageBubbleProps {
   isCopied: boolean;
 }
 
+// Format inline markdown (bold, italic, inline code)
+function formatInlineMarkdown(text: string): React.ReactNode[] {
+  const result: React.ReactNode[] = [];
+  // Match bold (**text** or __text__), italic (*text* or _text_), and inline code (`code`)
+  const regex = /(\*\*|__)(.+?)\1|(\*|_)(.+?)\3|`([^`]+)`/g;
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+
+  while ((match = regex.exec(text)) !== null) {
+    // Add text before match
+    if (match.index > lastIndex) {
+      result.push(text.slice(lastIndex, match.index));
+    }
+
+    if (match[1]) {
+      // Bold
+      result.push(<strong key={key++} className="font-semibold">{match[2]}</strong>);
+    } else if (match[3]) {
+      // Italic
+      result.push(<em key={key++} className="italic">{match[4]}</em>);
+    } else if (match[5]) {
+      // Inline code
+      result.push(
+        <code key={key++} className="px-1.5 py-0.5 bg-[var(--background-tertiary)] rounded text-sm font-mono">
+          {match[5]}
+        </code>
+      );
+    }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    result.push(text.slice(lastIndex));
+  }
+
+  return result.length > 0 ? result : [text];
+}
+
+// Parse markdown text into formatted elements
+function parseMarkdownText(text: string): React.ReactNode {
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let listItems: string[] = [];
+  let listType: 'ul' | 'ol' | null = null;
+  let key = 0;
+
+  const flushList = () => {
+    if (listItems.length > 0 && listType) {
+      const ListTag = listType === 'ol' ? 'ol' : 'ul';
+      elements.push(
+        <ListTag key={key++} className={cn(
+          'my-2 space-y-1',
+          listType === 'ol' ? 'list-decimal list-inside' : 'list-disc list-inside'
+        )}>
+          {listItems.map((item, i) => (
+            <li key={i} className="text-sm md:text-base">
+              {formatInlineMarkdown(item)}
+            </li>
+          ))}
+        </ListTag>
+      );
+      listItems = [];
+      listType = null;
+    }
+  };
+
+  for (const line of lines) {
+    // Check for numbered list (1. item, 2. item, etc.)
+    const olMatch = line.match(/^\d+\.\s+(.+)/);
+    if (olMatch) {
+      if (listType !== 'ol') {
+        flushList();
+        listType = 'ol';
+      }
+      listItems.push(olMatch[1]);
+      continue;
+    }
+
+    // Check for bullet list (- item, * item)
+    const ulMatch = line.match(/^[-*]\s+(.+)/);
+    if (ulMatch) {
+      if (listType !== 'ul') {
+        flushList();
+        listType = 'ul';
+      }
+      listItems.push(ulMatch[1]);
+      continue;
+    }
+
+    // Not a list item, flush any pending list
+    flushList();
+
+    // Empty line
+    if (line.trim() === '') {
+      elements.push(<br key={key++} />);
+      continue;
+    }
+
+    // Regular paragraph
+    elements.push(
+      <p key={key++} className="text-sm md:text-base">
+        {formatInlineMarkdown(line)}
+      </p>
+    );
+  }
+
+  // Flush any remaining list
+  flushList();
+
+  return <div className="space-y-1">{elements}</div>;
+}
+
 function MessageBubble({ message, onCopy, onDownload, isCopied }: MessageBubbleProps) {
   const isUser = message.role === 'user';
 
-  // Parse content for code blocks
+  // Parse content for code blocks and markdown
   const formattedContent = useMemo(() => {
     if (isUser || message.isLoading) return null;
 
@@ -745,7 +869,7 @@ function MessageBubble({ message, onCopy, onDownload, isCopied }: MessageBubbleP
                 </div>
               )}
 
-              {/* Text content with code blocks */}
+              {/* Text content with code blocks and markdown */}
               {formattedContent ? (
                 <div className="space-y-3">
                   {formattedContent.map((part, index) =>
@@ -769,16 +893,14 @@ function MessageBubble({ message, onCopy, onDownload, isCopied }: MessageBubbleP
                         </pre>
                       </div>
                     ) : (
-                      <p key={index} className="text-sm md:text-base whitespace-pre-wrap break-words">
-                        {part.content}
-                      </p>
+                      <div key={index}>
+                        {parseMarkdownText(part.content)}
+                      </div>
                     )
                   )}
                 </div>
               ) : (
-                <p className="text-sm md:text-base whitespace-pre-wrap break-words">
-                  {message.content}
-                </p>
+                parseMarkdownText(message.content)
               )}
             </>
           )}
