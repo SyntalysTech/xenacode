@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { X, Send, Mail } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -122,6 +123,7 @@ interface Message {
 }
 
 export function ChatBot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -182,6 +184,11 @@ export function ChatBot() {
       handleSend();
     }
   };
+
+  // No mostrar en la página de XenaCodeAI
+  if (pathname?.startsWith('/ai')) {
+    return null;
+  }
 
   return (
     <>
