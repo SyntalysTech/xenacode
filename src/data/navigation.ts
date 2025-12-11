@@ -6,7 +6,7 @@ export const navItems: NavItem[] = [
   { label: 'Proyectos', href: '/#proyectos' },
   { label: 'Syntalys', href: '/#syntalys' },
   { label: 'Opiniones', href: '/#opiniones' },
-  { label: 'Contacto', href: '/#contacto' },
+  { label: 'Tools', href: '/#tools' },
   { label: 'XenaCodeAI', href: '/ai' },
 ];
 

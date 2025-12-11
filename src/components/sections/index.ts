@@ -6,3 +6,4 @@ export { FeaturedProjects } from './FeaturedProjects';
 export { Testimonials } from './Testimonials';
 export { Contact } from './Contact';
 export { FreeTools } from './FreeTools';
+export { XenaCodeAIPromo } from './XenaCodeAIPromo';

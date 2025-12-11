@@ -90,12 +90,12 @@ export function FreeTools() {
               <span className="text-sm font-medium text-[var(--primary)]">100% Gratis</span>
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--foreground)] mb-4">
-              ¿Quieres más?
+              Mis Tools para Ti
             </h2>
             <p className="text-lg md:text-xl text-[var(--foreground-muted)] max-w-2xl mx-auto mb-6">
-              Herramientas profesionales creadas para desarrolladores y diseñadores.
+              Herramientas que he creado yo mismo y que uso a diario. Ahora son tuyas.
               <span className="block mt-2 text-[var(--primary)] font-semibold">
-                Sin registro. Sin límites. Sin publicidad.
+                Sin registro. Sin límites. Sin publicidad. De mi parte.
               </span>
             </p>
             <div className="h-1 w-24 mx-auto rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)]" />

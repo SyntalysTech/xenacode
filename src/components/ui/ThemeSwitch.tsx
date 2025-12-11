@@ -1,7 +1,7 @@
 'use client';
 
 import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '@/hooks';
+import { useTheme, useKeySound } from '@/hooks';
 import { cn } from '@/lib/cn';
 
 interface ThemeSwitchProps {
@@ -10,6 +10,12 @@ interface ThemeSwitchProps {
 
 export function ThemeSwitch({ forceDark = false }: ThemeSwitchProps) {
   const { theme, toggleTheme, mounted } = useTheme();
+  const { playKeySound } = useKeySound();
+
+  const handleClick = () => {
+    playKeySound();
+    toggleTheme();
+  };
 
   // Evitar flash de contenido incorrecto
   if (!mounted) {
@@ -23,7 +29,7 @@ export function ThemeSwitch({ forceDark = false }: ThemeSwitchProps) {
 
   return (
     <button
-      onClick={toggleTheme}
+      onClick={handleClick}
       className={cn(
         'relative w-14 h-8 rounded-full transition-all duration-300',
         'focus:outline-none focus:ring-2 focus:ring-offset-2',
