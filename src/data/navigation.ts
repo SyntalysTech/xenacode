@@ -7,6 +7,7 @@ export const navItems: NavItem[] = [
   { label: 'Syntalys', href: '#syntalys' },
   { label: 'Opiniones', href: '#opiniones' },
   { label: 'Contacto', href: '#contacto' },
+  { label: 'XenaCodeAI', href: '/ai' },
 ];
 
 export const socialLinks = [
