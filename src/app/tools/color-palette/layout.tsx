@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Color Palette Generator | Genera Paletas de Colores Gratis',
+  title: 'Generador de Paletas de Colores Online Gratis - Color Palette Generator',
   description:
-    'Generador de paletas de colores gratuito. Crea combinaciones armónicas para diseño web, branding y UI/UX. Sin registro, sin límites.',
+    'Generador de paletas de colores profesional y gratuito. Crea combinaciones armónicas, complementarias, análogas y triádicas para diseño web, branding y UI/UX. Exporta en CSS, SCSS, Tailwind y más. Sin registro.',
   keywords: [
     'color palette generator',
     'generador de paletas',
@@ -12,14 +12,39 @@ export const metadata: Metadata = {
     'diseño web colores',
     'color scheme',
     'colores gratis',
+    'paleta colores online',
+    'color picker',
+    'selector de colores',
+    'colores complementarios',
+    'colores armónicos',
+    'hex colors',
+    'rgb colors',
+    'tailwind colors',
+    'css colors',
   ],
   openGraph: {
-    title: 'Color Palette Generator | Herramienta Gratuita',
-    description: 'Genera paletas de colores armónicas para tus diseños. 100% gratis.',
+    title: 'Generador de Paletas de Colores Online Gratis',
+    description: 'Crea paletas de colores profesionales para diseño web y branding. Exporta en CSS, SCSS, Tailwind. 100% gratis.',
     url: 'https://xenacode.com/tools/color-palette',
     siteName: 'XenaCode Tools',
     type: 'website',
     locale: 'es_ES',
+    images: [
+      {
+        url: 'https://xenacode.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Color Palette Generator - XenaCode Tools',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Generador de Paletas de Colores Gratis',
+    description: 'Crea paletas de colores armónicas para tus proyectos. Sin registro.',
+  },
+  alternates: {
+    canonical: 'https://xenacode.com/tools/color-palette',
   },
 };
 
